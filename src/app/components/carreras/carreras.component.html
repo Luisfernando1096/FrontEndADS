@@ -1,1 +1,28 @@
-<p>carreras works!</p>
+<div class="container">
+    <div class="d-flex justify-content-between">
+        <h4>Carreras</h4>
+        <button class="btn btn-success" (click)="navigateToForm()">Agregar</button>
+    </div>
+    <table class="table table-bordered mt-4">
+        <thead>
+            <tr>
+                <th>Codigo</th>
+                <th>Nombre</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let item of lstCarreras">
+                <td>{{item.codigoCarrera}}</td>
+                <td>{{item.nombreCarrera}}</td>
+                <td>
+                    <!-- Podemos enviar valores a metodos en el .ts de esta forma-->
+                    <button class="btn btn-primary" (click)="updateCarrera(item.idCarrera)">Actualizar</button>
+                    <!-- Esta es otra forma con la que podemos enviar valores a
+                   metodos en el .ts-->
+                    <button class="btn btn-danger ml-2" (click)="deleteCarrera($event)" value="{{item.idCarrera}}">Eliminar</button>
+                </td>
+
+            </tr>
+        </tbody>
+    </table>
+</div>

@@ -7,39 +7,39 @@ import { Carrera } from "../models/carreras.interface";
     providedIn: 'root'
 })
 
-export class CarreraService {
+export class CarrerasService {
 
     constructor(private httpClient: HttpClient) { }
 
-    // Obtener lista de estudiantes
-    getListaEstudiantes() {
+    // Obtener lista de carreras
+    getListaCarreras() {
         return this.httpClient.get<any>(Endpoints.getCarreras);
     }
-    // Insertar estudiante
+    // Insertar carrera
     postCarrera(carrera: Carrera) {
         // Se arma el objeto a enviar
         let body = {
-            "codigo": carrera.codigo,
-            "nombre": carrera.nombre
+            "codigoCarrera": carrera.codigoCarrera,//deben llamarse igual a la clase en el backend
+            "nombreCarrera": carrera.nombreCarrera
         }
-        return this.httpClient.post<any>(Endpoints.postEstudiante, body);
+        return this.httpClient.post<any>(Endpoints.postCarrera, body);
     }
-    // Eliminar un estudiante
-    deleteEstudiante(idEstudiante: number) {
-        return this.httpClient.delete<any>(Endpoints.deleteEstudiante.replace(':id', idEstudiante.toString()));
+    // Eliminar una carrera
+    deleteCarrera(idCarrera: number) {
+        return this.httpClient.delete<any>(Endpoints.deleteCarrera.replace(':id', idCarrera.toString()));
     }
-    // Obtener estudiante por ID
-    getEstudiantePorID(idEstudiante: number) {
-        return this.httpClient.get<Carrera>(Endpoints.getCarreraPorID.replace(':id', idEstudiante.toString()));
+    // Obtener carrera por ID
+    getCarreraPorID(idCarrera: number) {
+        return this.httpClient.get<Carrera>(Endpoints.getCarreraPorID.replace(':id', idCarrera.toString()));
     }
-    // Actualizar estudiante
-    updateEstudiante(idCarrera: number, carrera: Carrera) {
+    // Actualizar carrera
+    updateCarrera(idCarrera: number, carrera: Carrera) {
         // Se arma el objeto a enviar
         let body = {
-            "id": carrera.id,
-            "codigo": carrera.codigo,
-            "nombre": carrera.nombre
+            "idCarrera": carrera.idCarrera,
+            "codigoCarrera": carrera.codigoCarrera,
+            "nombreCarrera": carrera.nombreCarrera
         }
-        return this.httpClient.patch<number>(Endpoints.updateEstudiante.replace(':id', idCarrera.toString()), body);
+        return this.httpClient.patch<number>(Endpoints.updateCarrera.replace(':id', idCarrera.toString()), body);
     }
 }

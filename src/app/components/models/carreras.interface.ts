@@ -1,5 +1,5 @@
 export interface Carrera {
-    id: number;
-    codigo: number;
-    nombre: string;
+    idCarrera: number;//Estos campos deben llamarse igual que en la clase del backend
+    codigoCarrera: number;
+    nombreCarrera: string;
 }

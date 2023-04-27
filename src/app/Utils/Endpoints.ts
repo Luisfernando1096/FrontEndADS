@@ -19,8 +19,8 @@ export const Endpoints = {
     // Endpoint para eliminar un estudiante
     deleteCarrera: environment.apiURL.concat('/carreras/eliminarCarrera/:id'),
     // Endpoint para actualizar un estudiante
-    updateCarrera: environment.apiURL.concat('/estudiantes/actualizarEstudiante/:id'),
+    updateCarrera: environment.apiURL.concat('/carreras/actualizarCarrera/:id'),
     // Endpoint que permite obtener estudiante por ID
-    getCarreraPorID: environment.apiURL.concat('/estudiantes/obtenerEstudiante/:id')
+    getCarreraPorID: environment.apiURL.concat('/carreras/obtenerCarrera/:id')
 
 }

@@ -1,0 +1,108 @@
+import { Component, OnInit } from '@angular/core';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { Estudiante } from '../../models/estudiantes.interface';
+import { ActivatedRoute, Router } from '@angular/router';
+import { EstudiantesService } from '../estudiantes.service';
+import { Subscription } from 'rxjs';
+import { Location } from '@angular/common';
+
+@Component({
+  selector: 'app-agregar-estudiante',
+  templateUrl: './agregar-estudiante.component.html',
+  styleUrls: ['./agregar-estudiante.component.css']
+})
+export class AgregarEstudianteComponent implements OnInit {
+
+  // Variable que permite manejar la subscripcion al observable de ruta.
+  onRouteStart!: Subscription;
+  // Variable que almacena el ID del estudiante
+  idEstudiante!: number;
+
+  // Creacion de una variable de tipo formgroup (permite hacer manejo del formulario)
+  form!: FormGroup;
+  // Creacion de objeto que se enviara a traves del endpoint
+  formEstudiante: Estudiante;
+  constructor(private formBuilder: FormBuilder, private estudianteService: EstudiantesService, private router: Router,
+    private activedRoute: ActivatedRoute, private location: Location) {
+    // Se inicializa el objeto estudiante que se enviara
+    this.formEstudiante = {} as Estudiante;
+  }
+
+  ngOnInit(): void {
+    // Se inicia el controlador del formulario para validar
+    this.form = this.formBuilder.group({
+      codigo: ['', [Validators.required]],
+      nombres: ['', [Validators.required]],
+      apellidos: ['', [Validators.required]],
+      correo: ['', [Validators.required, Validators.email]]
+    });
+    // Se inicializa el observable de ruta
+    this.onRouteStart = this.activedRoute.params.subscribe((temp) => {
+      // Se almacena el valor capturado en la ruta.
+      this.idEstudiante = temp.idEstudiante;
+    });
+    // Se valida que el valor del idEstudiante sea mayor a cero y distinto de nulo.
+    if (this.idEstudiante && this.idEstudiante > 0) {
+      // Es edicion
+      // Se consulta la informacion del estudiante, para rellenar el formulario
+      this.estudianteService.getEstudiantePorID(this.idEstudiante).subscribe({
+        next: (temp) => {
+          this.formEstudiante = temp;
+          // Se rellena la informacion del formulario
+          this.form.controls['codigo'].setValue(this.formEstudiante.codigo);
+          this.form.controls['nombres'].setValue(this.formEstudiante.nombres);
+          this.form.controls['apellidos'].setValue(this.formEstudiante.apellidos);
+          this.form.controls['correo'].setValue(this.formEstudiante.email);
+        },
+        error: (err) => {
+          console.log("Error: ", err);
+        }
+      });
+    }
+  }
+  onSubmit() {
+    // Asignacion de valores
+    this.formEstudiante.codigo = this.form.get('codigo')?.value;
+    this.formEstudiante.nombres = this.form.get('nombres')?.value;
+    this.formEstudiante.apellidos = this.form.get('apellidos')?.value;
+    this.formEstudiante.email = this.form.get('correo')?.value;
+    // Se valida si la variable idEstudiante contiene valor, los escenarios son:
+    // 1. Si el idEstudiante existe y es mayor a 0 entonces se debe realizar una actualizacion de datos.
+    // 2. Si el idEstudiante no existe entonces se debe realizar una inserccion
+    if (this.idEstudiante && this.idEstudiante > 0) {
+      this.estudianteService.updateEstudiante(this.idEstudiante, this.formEstudiante
+      ).subscribe({
+        // Respuesta exitosa
+        next: (temp) => {
+          // Navegar hacia atras
+          //this.router.navigate(['']);
+          this.location.back()
+        },
+        // En caso de error
+        error: (err) => {
+          console.log("Error al actualizar");
+        }
+      })
+    } else {
+      // Es inserccion
+      this.estudianteService.postEstudiante(this.formEstudiante).subscribe({
+        // Respuesta exitosa
+        next: (temp) => {
+          // Navegar hacia atras
+          //this.router.navigate(['']);
+          this.location.back();
+        },
+        // En caso de error
+        error: (err) => {
+          console.log("Error al insertar");
+        }
+      })
+    }
+  }
+  /*Funcion que permite validar los campos del formulario
+    trabaja evaluando si el campo ha sido manipulado o esta vacio*/
+  validateField(field: string) {
+    return this.form.get(field)?.invalid && this.form.get(field)?.touched;
+  }
+
+}

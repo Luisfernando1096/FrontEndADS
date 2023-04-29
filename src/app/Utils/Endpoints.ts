@@ -12,6 +12,7 @@ export const Endpoints = {
     updateEstudiante: environment.apiURL.concat('/estudiantes/actualizarEstudiante/:id'),
     // Endpoint que permite obtener estudiante por ID
     getEstudiantePorID: environment.apiURL.concat('/estudiantes/obtenerEstudiante/:id'),
+
     // Endpoint que permite obtener todos los estudiantes
     getCarreras: environment.apiURL.concat('/carreras/obtenerListaCarreras'),
     // Endpoint para insertar un estudiante
@@ -21,6 +22,17 @@ export const Endpoints = {
     // Endpoint para actualizar un estudiante
     updateCarrera: environment.apiURL.concat('/carreras/actualizarCarrera/:id'),
     // Endpoint que permite obtener estudiante por ID
-    getCarreraPorID: environment.apiURL.concat('/carreras/obtenerCarrera/:id')
+    getCarreraPorID: environment.apiURL.concat('/carreras/obtenerCarrera/:id'),
+
+    // Endpoint que permite obtener todos los estudiantes
+    getProfesores: environment.apiURL.concat('/profesores/obtenerListaProfesores'),
+    // Endpoint para insertar un estudiante
+    postProfesor: environment.apiURL.concat('/profesores/insertarProfesor'),
+    // Endpoint para eliminar un estudiante
+    deleteProfesor: environment.apiURL.concat('/profesores/eliminarProfesor/:id'),
+    // Endpoint para actualizar un estudiante
+    updateProfesor: environment.apiURL.concat('/profesores/actualizarProfesor/:id'),
+    // Endpoint que permite obtener estudiante por ID
+    getProfesorPorID: environment.apiURL.concat('/profesores/obtenerProfesor/:id'),
 
 }

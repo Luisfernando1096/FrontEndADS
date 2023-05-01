@@ -10,6 +10,8 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { AgregarEstudianteComponent } from './components/estudiantes/agregar-estudiante/agregar-estudiante.component';
 import { CarrerasComponent } from './components/carreras/carreras.component';
 import { AgregarCarreraComponent } from './components/carreras/agregar-carrera/agregar-carrera.component';
+import { GruposComponent } from './components/grupos/grupos.component';
+import { AgregarGrupoComponent } from './components/grupos/agregar-grupo/agregar-grupo.component';
 
 @NgModule({
   declarations: [
@@ -18,7 +20,9 @@ import { AgregarCarreraComponent } from './components/carreras/agregar-carrera/a
     EstudiantesComponent,
     AgregarEstudianteComponent,
     CarrerasComponent,
-    AgregarCarreraComponent
+    AgregarCarreraComponent,
+    GruposComponent,
+    AgregarGrupoComponent
   ],
   imports: [
     BrowserModule,

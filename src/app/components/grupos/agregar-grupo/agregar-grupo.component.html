@@ -1,0 +1,29 @@
+<div class="container">
+    <div class="mt-4">
+        <h3>Agregar grupo</h3>
+    </div>
+    <form class="mt-4" [formGroup]="form">
+        <div class="form-group mt-2">
+            <label>Carrera</label>
+            <select class="form-control" formControlName="carrera">
+                <option *ngFor="let item of lstCarreras" [value]="item.idCarrera">{{item.nombreCarrera}}</option>
+            </select>
+            <div class="invalid-feedback">
+                <span *ngIf="validateField('carrera')">Este campo es requerido</span>
+            </div>
+        </div>
+        <div class="form-group mt-2">
+            <label>Año</label>
+            <input formControlName="anio" type="text" class="form-control"
+                [class.is-invalid]="validateField('anio')" placeholder="Año">
+            <div class="invalid-feedback">
+                <span *ngIf="validateField('anio')">Este campo es requerido</span>
+            </div>
+        </div>
+        <div class="d-flex justify-content-end">
+            <button type="submit" class="btn btn-primary" [disabled]="!form.valid" (click)="onSubmit()">Confirmar
+                informacion</button>
+        </div>
+    </form>
+</div>
+

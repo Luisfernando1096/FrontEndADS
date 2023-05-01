@@ -7,6 +7,8 @@ import { AgregarCarreraComponent } from './components/carreras/agregar-carrera/a
 import { CarrerasComponent } from './components/carreras/carreras.component';
 import { AgregarGrupoComponent } from './components/grupos/agregar-grupo/agregar-grupo.component';
 import { GruposComponent } from './components/grupos/grupos.component';
+import { ProfesoresComponent } from './components/profesores/profesores.component';
+import { AgregarProfesorComponent } from './components/profesores/agregar-profesor/agregar-profesor.component';
 
 const routes: Routes = [
   { path: '', component: ComponentsComponent, pathMatch: 'full' },
@@ -19,6 +21,9 @@ const routes: Routes = [
   { path: 'grupos', component: GruposComponent },
   { path: 'agregarGrupo', component: AgregarGrupoComponent },
   { path: 'agregarGrupo/:idGrupo', component: AgregarGrupoComponent },
+  { path: 'profesores', component: ProfesoresComponent },
+  { path: 'agregarProfesor', component: AgregarProfesorComponent },
+  { path: 'agregarProfesor/:idProfesor', component: AgregarProfesorComponent },
 ];
 
 @NgModule({

@@ -31,6 +31,16 @@ export const Endpoints = {
     // Endpoint para actualizar un Grupo
     updateGrupo: environment.apiURL.concat('/grupos/actualizarGrupo/:id'),
     // Endpoint que permite obtener Grupo por ID
-    getGrupoPorID: environment.apiURL.concat('/grupos/obtenerGrupo/:id')
+    getGrupoPorID: environment.apiURL.concat('/grupos/obtenerGrupo/:id'),
+    // Endpoint que permite obtener todos los estudiantes
+    getProfesores: environment.apiURL.concat('/profesores/obtenerListaProfesores'),
+    // Endpoint para insertar un estudiante
+    postProfesor: environment.apiURL.concat('/profesores/insertarProfesor'),
+    // Endpoint para eliminar un estudiante
+    deleteProfesor: environment.apiURL.concat('/profesores/eliminarProfesor/:id'),
+    // Endpoint para actualizar un estudiante
+    updateProfesor: environment.apiURL.concat('/profesores/actualizarProfesor/:id'),
+    // Endpoint que permite obtener estudiante por ID
+    getProfesorPorID: environment.apiURL.concat('/profesores/obtenerProfesor/:id'),
 
 }

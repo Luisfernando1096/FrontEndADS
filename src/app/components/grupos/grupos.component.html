@@ -11,13 +11,18 @@
                 <th>Profesor</th>
                 <th>Ciclo</th>
                 <th>Año</th>
+                <th>Opciones</th>
             </tr>
         </thead>
         <tbody>
-            <tr *ngFor="let item of lstGrupos; let i = index">
-                <td>{{lstCarreras[i].nombreCarrera}}</td>
+            <tr *ngFor="let item of lstGrupos">
+                <ng-container *ngFor="let item2 of lstCarreras">
+                    <td *ngIf="item.idCarrera === item2.idCarrera">{{item2.nombreCarrera}}</td>
+                </ng-container>
                 <td>{{item.idMateria}}</td>
-                <td>{{item.idProfesor}}</td>
+                <ng-container *ngFor="let item3 of lstProfesores">
+                    <td *ngIf="item.idProfesor === item3.idProfesor">{{item3.nombresProfesor}}</td>
+                </ng-container>
                 <td>{{item.ciclo}}</td>
                 <td>{{item.anio}}</td>
                 <td>

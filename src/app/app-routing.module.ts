@@ -9,6 +9,8 @@ import { AgregarGrupoComponent } from './components/grupos/agregar-grupo/agregar
 import { GruposComponent } from './components/grupos/grupos.component';
 import { ProfesoresComponent } from './components/profesores/profesores.component';
 import { AgregarProfesorComponent } from './components/profesores/agregar-profesor/agregar-profesor.component';
+import { MateriasComponent } from './components/materias/materias.component';
+import { AgregarMateriaComponent } from './components/materias/agregar-materia/agregar-materia.component';
 
 const routes: Routes = [
   { path: '', component: ComponentsComponent, pathMatch: 'full' },
@@ -24,6 +26,10 @@ const routes: Routes = [
   { path: 'profesores', component: ProfesoresComponent },
   { path: 'agregarProfesor', component: AgregarProfesorComponent },
   { path: 'agregarProfesor/:idProfesor', component: AgregarProfesorComponent },
+
+  { path: 'materias', component: MateriasComponent },
+  { path: 'agregarMateria', component: AgregarMateriaComponent },
+  { path: 'agregarMateria/:idMateria', component: AgregarMateriaComponent },
 ];
 
 @NgModule({

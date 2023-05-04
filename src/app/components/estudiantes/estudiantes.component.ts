@@ -2,6 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { EstudiantesService } from './estudiantes.service';
 import { Router } from '@angular/router';
 import { Estudiante } from '../models/estudiantes.interface';
+import { parsearErroresAPI } from 'src/app/Utils/Utilities';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-estudiantes',
@@ -51,7 +53,7 @@ export class EstudiantesComponent implements OnInit {
       this.router.navigate(['/agregarEstudiante', valor]);
     }
   }
-  // Eliminar un estudiante metodo que utilizare en el html
+  /*// Eliminar un estudiante metodo que utilizare en el html
   deleteEstudiante(event: any) {
     this.estudiantesService.deleteEstudiante(event.target.value).subscribe({
       // En caso exitoso
@@ -64,6 +66,40 @@ export class EstudiantesComponent implements OnInit {
         console.log("Error al eliminar");
       }
     })
+  }*/
+  // Eliminar un estudiante
+  deleteEstudiante(event: any) {
+    Swal.fire({
+      title: "¿Quiere eliminar este registro?",
+      text: "Esta acción no se puede revertir",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Sí, eliminar",
+      cancelButtonText: "Cancelar",
+      showLoaderOnConfirm: true
+    }).then((result) => {
+      if (result.isConfirmed) {
+        this.estudiantesService.deleteEstudiante(event.target.value).subscribe({
+          // En caso exitoso
+          next: (temp) => {
+            Swal.fire("Eliminado", "Registro eliminado con exito", "success");
+            // Refrescamos la lista de estudiantes
+            this.getAllEstudiantes();
+          },
+          // En caso erroneo
+          error: (err) => {
+            Swal.fire({
+              icon: 'error',
+              title: 'Error al eliminar',
+              text: parsearErroresAPI(err).toString()
+            });
+          }
+        });
+      }
+    });
   }
+
 
 }

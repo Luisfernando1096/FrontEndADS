@@ -5,6 +5,8 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { EstudiantesService } from '../estudiantes.service';
 import { Subscription } from 'rxjs';
 import { Location } from '@angular/common';
+import Swal from 'sweetalert2';
+import { parsearErroresAPI } from 'src/app/Utils/Utilities';
 
 @Component({
   selector: 'app-agregar-estudiante',
@@ -66,6 +68,15 @@ export class AgregarEstudianteComponent implements OnInit {
     this.formEstudiante.nombres = this.form.get('nombres')?.value;
     this.formEstudiante.apellidos = this.form.get('apellidos')?.value;
     this.formEstudiante.email = this.form.get('correo')?.value;
+
+    // Mostrar dialogo
+    Swal.fire({
+      allowOutsideClick: false,
+      icon: 'info',
+      text: 'Guardando registro, espere por favor...'
+    });
+    Swal.showLoading();
+
     // Se valida si la variable idEstudiante contiene valor, los escenarios son:
     // 1. Si el idEstudiante existe y es mayor a 0 entonces se debe realizar una actualizacion de datos.
     // 2. Si el idEstudiante no existe entonces se debe realizar una inserccion
@@ -74,13 +85,18 @@ export class AgregarEstudianteComponent implements OnInit {
       ).subscribe({
         // Respuesta exitosa
         next: (temp) => {
+          Swal.fire("Actualizado", "Registro actualizado con exito", "success");
           // Navegar hacia atras
           //this.router.navigate(['']);
           this.location.back()
         },
         // En caso de error
         error: (err) => {
-          console.log("Error al actualizar");
+          Swal.fire({
+            icon: 'error',
+            title: 'Error al actualizar persona',
+            text: parsearErroresAPI(err).toString()
+          });
         }
       })
     } else {
@@ -88,13 +104,18 @@ export class AgregarEstudianteComponent implements OnInit {
       this.estudianteService.postEstudiante(this.formEstudiante).subscribe({
         // Respuesta exitosa
         next: (temp) => {
+          Swal.fire("Registrado", "Registro insertado con éxito", "success");
           // Navegar hacia atras
           //this.router.navigate(['']);
           this.location.back();
         },
         // En caso de error
         error: (err) => {
-          console.log("Error al insertar");
+          Swal.fire({
+            icon: 'error',
+            title: 'Error al insertar persona',
+            text: parsearErroresAPI(err).toString()
+          });
         }
       })
     }

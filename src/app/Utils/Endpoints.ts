@@ -35,4 +35,15 @@ export const Endpoints = {
     // Endpoint que permite obtener estudiante por ID
     getProfesorPorID: environment.apiURL.concat('/profesores/obtenerProfesor/:id'),
 
+    getMaterias: environment.apiURL.concat('/materias/obtenerListaMaterias'),
+    // Endpoint para insertar un estudiante
+    postMateria: environment.apiURL.concat('/materias/insertarMateria'),
+    // Endpoint para eliminar un estudiante
+    deleteMateria: environment.apiURL.concat('/materias/eliminarMateria/:id'),
+    // Endpoint para actualizar un estudiante
+    updateMateria: environment.apiURL.concat('/materias/actualizarMateria/:id'),
+    // Endpoint que permite obtener estudiante por ID
+    getMateriaPorID: environment.apiURL.concat('/materias/obtenerMateria/:id'),
+
+
 }

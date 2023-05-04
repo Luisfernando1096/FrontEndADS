@@ -12,6 +12,8 @@ import { CarrerasComponent } from './components/carreras/carreras.component';
 import { AgregarCarreraComponent } from './components/carreras/agregar-carrera/agregar-carrera.component';
 import { ProfesoresComponent } from './components/profesores/profesores.component';
 import { AgregarProfesorComponent } from './components/profesores/agregar-profesor/agregar-profesor.component';
+import { MateriasComponent } from './components/materias/materias.component';
+import { AgregarMateriaComponent } from './components/materias/agregar-materia/agregar-materia.component';
 
 @NgModule({
   declarations: [
@@ -22,7 +24,9 @@ import { AgregarProfesorComponent } from './components/profesores/agregar-profes
     CarrerasComponent,
     AgregarCarreraComponent,
     ProfesoresComponent,
-    AgregarProfesorComponent
+    AgregarProfesorComponent,
+    MateriasComponent,
+    AgregarMateriaComponent
   ],
   imports: [
     BrowserModule,

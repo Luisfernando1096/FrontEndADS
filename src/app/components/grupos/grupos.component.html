@@ -19,7 +19,9 @@
                 <ng-container *ngFor="let item2 of lstCarreras">
                     <td *ngIf="item.idCarrera === item2.idCarrera">{{item2.nombreCarrera}}</td>
                 </ng-container>
-                <td>{{item.idMateria}}</td>
+                <ng-container *ngFor="let item4 of lstMaterias">
+                    <td *ngIf="item.idMateria === item4.idMateria">{{item4.nombreMateria}}</td>
+                </ng-container>
                 <ng-container *ngFor="let item3 of lstProfesores">
                     <td *ngIf="item.idProfesor === item3.idProfesor">{{item3.nombresProfesor}}</td>
                 </ng-container>

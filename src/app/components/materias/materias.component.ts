@@ -32,33 +32,33 @@ export class MateriasComponent implements OnInit {
       }
     })
   }
-    // Metodo que permite navegar al formulario para insertar carreras
-    navigateToForm() {
-      this.router.navigate(['/agregarMateria']);
+  // Metodo que permite navegar al formulario para insertar carreras
+  navigateToForm() {
+    this.router.navigate(['/agregarMateria']);
+  }
+  /**
+  * Metodo que permite viajar al componente para agregar una carrera (pero en
+  modo edicion).
+  */
+  updateMateria(valor: number) {
+    // Viajando al componente agregar carrera
+    // Primero se valida que exista un valor (es decir que sea distinto de nulo)
+    if (valor) {
+      // Como puede notar, ahora se anexa un valor a la redireccion. Ej./agregarCarrera/3
+      this.router.navigate(['/agregarMateria', valor]);
     }
-    /**
-    * Metodo que permite viajar al componente para agregar una carrera (pero en
-    modo edicion).
-    */
-    updateMateria(valor: number) {
-      // Viajando al componente agregar carrera
-      // Primero se valida que exista un valor (es decir que sea distinto de nulo)
-      if (valor) {
-        // Como puede notar, ahora se anexa un valor a la redireccion. Ej./agregarCarrera/3
-        this.router.navigate(['/agregarMateria', valor]);
+  }
+  deleteMateria(event: any) {
+    this.materiasService.deleteMateria(event.target.value).subscribe({
+      // En caso exitoso
+      next: (temp) => {
+        // Refrescamos la lista de carreras
+        this.getAllMaterias();
+      },
+      // En caso erroneo
+      error: (err) => {
+        console.log("Error al eliminar");
       }
-    }
-    deleteMateria(event: any) {
-      this.materiasService.deleteMateria(event.target.value).subscribe({
-        // En caso exitoso
-        next: (temp) => {
-          // Refrescamos la lista de carreras
-          this.getAllMaterias();
-        },
-        // En caso erroneo
-        error: (err) => {
-          console.log("Error al eliminar");
-        }
-      })
-    }
+    })
+  }
 }

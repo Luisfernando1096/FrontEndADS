@@ -9,6 +9,9 @@ import { CarrerasService } from '../../carreras/carreras.service';
 import { ProfesoresService } from '../../profesores/profesores.service';
 import { Carrera } from '../../models/carreras.interface';
 import { Profesor } from '../../models/profesores.interface';
+import { Materia } from '../../models/materias.interface';
+import { MateriasService } from '../../materias/materias.service';
+import { MateriasComponent } from '../../materias/materias.component';
 
 @Component({
   selector: 'app-agregar-grupo',
@@ -20,20 +23,19 @@ export class AgregarGrupoComponent implements OnInit {
   lstProfesores: Profesor[];
   // Arreglo para almacenar el listado de carreras
   lstCarreras: Carrera[];
+  lstMaterias: Materia[];
   // Variable que permite manejar la subscripcion al observable de ruta.
   onRouteStart!: Subscription;
   // Variable que almacena el ID de grupo
   idGrupo!: number;
-  //Variable para establecer carrera en select
-  carreraSeleccionada: number;
-  profesorSeleccionado: number;
 
   // Creacion de una variable de tipo formgroup (permite hacer manejo del formulario)
   form!: FormGroup;
   // Creacion de objeto que se enviara a traves del endpoint
   formGrupo: Grupo;
   constructor(private carrerasService: CarrerasService,
-    private profesoresService: ProfesoresService, 
+    private profesoresService: ProfesoresService,
+    private materiasService: MateriasService, 
     private formBuilder: FormBuilder, private grupoService: GrupoService, 
     private router: Router,
     private activedRoute: ActivatedRoute, private location: Location) {
@@ -42,8 +44,7 @@ export class AgregarGrupoComponent implements OnInit {
     // Es necesario inicializar el arreglo anteriormente creado
     this.lstCarreras = [];
     this.lstProfesores = [];
-    this.carreraSeleccionada = 1;
-    this.profesorSeleccionado = 1;
+    this.lstMaterias = [];
   }
 
   // Obtener lista de profesores
@@ -53,6 +54,21 @@ export class AgregarGrupoComponent implements OnInit {
       next: (temp) => {
         // Se asigna la lista al arreglo anteriormente descrito
         this.lstProfesores = temp;
+      },
+      // En caso de error
+      error: (err) => {
+        console.log("No se pudo obtener informacion");
+      }
+    })
+  }
+
+  //Obtener lista de materias 
+  getAllMaterias() {
+    this.materiasService.getListaMaterias().subscribe({
+      // Se evalua que la respuesta del endpoint sea exitosa
+      next: (temp) => {
+        // Se asigna la lista al arreglo anteriormente descrito
+        this.lstMaterias = temp;
       },
       // En caso de error
       error: (err) => {
@@ -79,6 +95,9 @@ export class AgregarGrupoComponent implements OnInit {
   ngOnInit(): void {
     // Se inicia el controlador del formulario para validar
     this.form = this.formBuilder.group({
+      carrera: ['', [Validators.required]],
+      materia: ['', [Validators.required]],
+      profesor: ['', [Validators.required]],
       ciclo: ['', [Validators.required]],
       anio: ['', [Validators.required]]
     });
@@ -90,13 +109,14 @@ export class AgregarGrupoComponent implements OnInit {
     // Se valida que el valor del idCarrera sea mayor a cero y distinto de nulo.
     if (this.idGrupo && this.idGrupo > 0) {
       // Es edicion
-      // Se consulta la informacion del carrera, para rellenar el formulario
+      // Se consulta la informacion del grupo, para rellenar el formulario
       this.grupoService.getGrupoPorID(this.idGrupo).subscribe({
         next: (temp) => {
           this.formGrupo = temp;
           // Se rellena la informacion del formulario
-          //this.form.controls['carrera'].setValue(this.formGrupo.idCarrera);
-          this.carreraSeleccionada = this.formGrupo.idCarrera;
+          this.form.controls['carrera'].setValue(this.formGrupo.idCarrera);
+          this.form.controls['materia'].setValue(this.formGrupo.idMateria);
+          this.form.controls['profesor'].setValue(this.formGrupo.idProfesor);
           this.form.controls['ciclo'].setValue(this.formGrupo.ciclo);
           this.form.controls['anio'].setValue(this.formGrupo.anio);
         },
@@ -105,6 +125,7 @@ export class AgregarGrupoComponent implements OnInit {
         }
       });
     }
+    this.getAllMaterias();
     this.getAllCarreras();
     this.getAllProfesores();
   }

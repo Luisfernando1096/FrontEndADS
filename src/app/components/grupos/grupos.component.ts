@@ -6,6 +6,8 @@ import { Carrera } from '../models/carreras.interface';
 import { CarrerasService } from '../carreras/carreras.service';
 import { Profesor } from '../models/profesores.interface';
 import { ProfesoresService } from '../profesores/profesores.service';
+import { Materia } from '../models/materias.interface';
+import { MateriasService } from '../materias/materias.service';
 
 @Component({
   selector: 'app-grupos',
@@ -16,25 +18,43 @@ export class GruposComponent implements OnInit {
   // Arreglo para almacenar el listado de Grupo
   lstGrupos: Grupo[];
   lstCarreras: Carrera[];
-  //lstMaterias: Materia[];
+  lstMaterias: Materia[];
   lstProfesores: Profesor[];
 
   constructor(private grupoService: GrupoService,
     private profesoresService: ProfesoresService,
-     private router: Router, private carrerasService: CarrerasService) {
+    private materiasService: MateriasService,
+    private router: Router, private carrerasService: CarrerasService) {
     // Es necesario inicializar el arreglo anteriormente creado
     this.lstGrupos = [];
     this.lstCarreras = [];
     this.lstProfesores = [];
+    this.lstMaterias = [];
   }
 
   ngOnInit(): void {
     this.getAllGrupos();
     this.getAllCarreras();
     this.getAllProfesores();
+    this.getAllMaterias();
   }
 
-  // Obtener lista de carreras
+  // Obtener lista de materias
+  getAllMaterias() {
+    this.materiasService.getListaMaterias().subscribe({
+      // Se evalua que la respuesta del endpoint sea exitosa
+      next: (temp) => {
+        // Se asigna la lista al arreglo anteriormente descrito
+        this.lstMaterias = temp;
+      },
+      // En caso de error
+      error: (err) => {
+        console.log("No se pudo obtener informacion");
+      }
+    })
+  }
+
+  // Obtener lista de profesores
   getAllProfesores() {
     this.profesoresService.getListaProfesores().subscribe({
       // Se evalua que la respuesta del endpoint sea exitosa

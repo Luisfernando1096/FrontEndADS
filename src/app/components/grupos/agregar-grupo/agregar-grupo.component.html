@@ -5,21 +5,30 @@
     <form class="mt-4" [formGroup]="form">
         <div class="form-group mt-2">
             <label>Carrera</label>
-            <select [(ngModel)]="carreraSeleccionada" class="form-control" formControlName="carrera">
-                <option *ngFor="let item of lstCarreras" [selected]="carreraSeleccionada === item.idCarrera" value="item.idCarrera">{{item.nombreCarrera}}</option>
+            <select class="form-control" formControlName="carrera" [class.is-invalid]="validateField('carrera')">
+                <option *ngFor="let carreras of lstCarreras" value="{{carreras.idCarrera}}">{{carreras.nombreCarrera}}</option>
             </select>
+            <div class="invalid-feedback">
+                <span *ngIf="validateField('carrera')">Este campo es requerido</span>
+            </div>
         </div>
         <div class="form-group mt-2">
             <label>Materia</label>
-            <select [(ngModel)]="carreraSeleccionada" class="form-control" formControlName="carrera">
-                <option *ngFor="let item of lstCarreras" [selected]="carreraSeleccionada === item.idCarrera" value="item.idCarrera">{{item.nombreCarrera}}</option>
+            <select class="form-control" formControlName="materia" [class.is-invalid]="validateField('materia')">
+                <option *ngFor="let materias of lstMaterias" value="{{materias.idMateria}}">{{materias.nombreMateria}}</option>
             </select>
+            <div class="invalid-feedback">
+                <span *ngIf="validateField('materia')">Este campo es requerido</span>
+            </div>
         </div>
         <div class="form-group mt-2">
             <label>Profesor</label>
-            <select [(ngModel)]="profesorSeleccionado" class="form-control" formControlName="profesor">
-                <option *ngFor="let profesores of lstProfesores" [selected]="profesorSeleccionado === profesores.idProfesor" value="profesores.idProfesor">{{profesores.nombresProfesor}}</option>
+            <select class="form-control" formControlName="profesor" [class.is-invalid]="validateField('profesor')">
+                <option *ngFor="let profesores of lstProfesores" value="{{profesores.idProfesor}}">{{profesores.nombresProfesor}}</option>
             </select>
+            <div class="invalid-feedback">
+                <span *ngIf="validateField('profesor')">Este campo es requerido</span>
+            </div>
         </div>
         <div class="form-group mt-2">
             <label>Ciclo</label>

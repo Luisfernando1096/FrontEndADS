@@ -2,6 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { ProfesoresService } from './profesores.service';
 import { Router } from '@angular/router';
 import { Profesor } from '../models/profesores.interface';
+import { parsearErroresAPI } from 'src/app/Utils/Utilities';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-profesores',
@@ -53,7 +55,7 @@ export class ProfesoresComponent implements OnInit {
     }
   }
   // Eliminar una carrera metodo que utilizare en el html
-  deleteProfesor(event: any) {
+  /*deleteProfesor(event: any) {
     this.profesoresService.deleteProfesor(event.target.value).subscribe({
       // En caso exitoso
       next: (temp) => {
@@ -65,5 +67,37 @@ export class ProfesoresComponent implements OnInit {
         console.log("Error al eliminar");
       }
     })
+  }*/
+  deleteProfesor(event: any) {
+    Swal.fire({
+      title: "¿Quiere eliminar este registro?",
+      text: "Esta acción no se puede revertir",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Sí, eliminar",
+      cancelButtonText: "Cancelar",
+      showLoaderOnConfirm: true
+    }).then((result) => {
+      if (result.isConfirmed) {
+        this.profesoresService.deleteProfesor(event.target.value).subscribe({
+          // En caso exitoso
+          next: (temp) => {
+            Swal.fire("Eliminado", "Registro eliminado con exito", "success");
+            // Refrescamos la lista de estudiantes
+            this.getAllProfesores();
+          },
+          // En caso erroneo
+          error: (err) => {
+            Swal.fire({
+              icon: 'error',
+              title: 'Error al eliminar',
+              text: parsearErroresAPI(err).toString()
+            });
+          }
+        });
+      }
+    });
   }
 }

@@ -5,6 +5,9 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { ProfesoresService } from '../profesores.service';
 import { Subscription } from 'rxjs';
 import { Location } from '@angular/common';
+import Swal from 'sweetalert2';
+import { parsearErroresAPI } from 'src/app/Utils/Utilities';
+
 
 @Component({
   selector: 'app-agregar-profesor',
@@ -63,21 +66,36 @@ export class AgregarProfesorComponent implements OnInit {
     this.formProfesor.emailProfesor = this.form.get('emailProfesor')?.value;
     this.formProfesor.nombresProfesor = this.form.get('nombresProfesor')?.value;
     this.formProfesor.apellidosProfesor = this.form.get('apellidosProfesor')?.value;
+
+       // Mostrar dialogo
+       Swal.fire({
+        allowOutsideClick: false,
+        icon: 'info',
+        text: 'Guardando registro, espere por favor...'
+      });
+      Swal.showLoading();
+   
     // Se valida si la variable idCarrera contiene valor, los escenarios son:
     // 1. Si el idCarrera existe y es mayor a 0 entonces se debe realizar una actualizacion de datos.
     // 2. Si el idCarrera no existe entonces se debe realizar una inserccion
+    
     if (this.idProfesor && this.idProfesor > 0) {
       this.profesorService.updateProfesor(this.idProfesor, this.formProfesor
       ).subscribe({
         // Respuesta exitosa
         next: (temp) => {
+          Swal.fire("Actualizado", "Registro actualizado con exito", "success");
           // Navegar hacia atras
           //this.router.navigate(['']);
           this.location.back()
         },
         // En caso de error
         error: (err) => {
-          console.log("Error al actualizar");
+          Swal.fire({
+            icon: 'error',
+            title: 'Error al actualizar persona',
+            text: parsearErroresAPI(err).toString()
+          });
         }
       })
     } else {
@@ -85,13 +103,18 @@ export class AgregarProfesorComponent implements OnInit {
       this.profesorService.postProfesor(this.formProfesor).subscribe({
         // Respuesta exitosa
         next: (temp) => {
+          Swal.fire("Registrado", "Registro insertado con éxito", "success");
           // Navegar hacia atras
           //this.router.navigate(['']);
           this.location.back();
         },
         // En caso de error
         error: (err) => {
-          console.log("Error al insertar");
+          Swal.fire({
+            icon: 'error',
+            title: 'Error al insertar persona',
+            text: parsearErroresAPI(err).toString()
+          });
         }
       })
     }

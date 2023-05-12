@@ -2,6 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { CarrerasService } from './carreras.service';
 import { Router } from '@angular/router';
 import { Carrera } from '../models/carreras.interface';
+import Swal from 'sweetalert2';
+import { parsearErroresAPI } from 'src/app/Utils/Utilities';
 
 @Component({
   selector: 'app-carreras',
@@ -53,17 +55,36 @@ export class CarrerasComponent implements OnInit {
   }
   // Eliminar una carrera metodo que utilizare en el html
   deleteCarrera(event: any) {
-    this.carrerasService.deleteCarrera(event.target.value).subscribe({
-      // En caso exitoso
-      next: (temp) => {
-        // Refrescamos la lista de carreras
-        this.getAllCarreras();
-      },
-      // En caso erroneo
-      error: (err) => {
-        console.log("Error al eliminar");
+    Swal.fire({
+      title: "¿Quiere eliminar este registro?",
+      text: "Esta acción no se puede revertir",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Sí, eliminar",
+      cancelButtonText: "Cancelar",
+      showLoaderOnConfirm: true
+    }).then((result) => {
+      if (result.isConfirmed) {
+        this.carrerasService.deleteCarrera(event.target.value).subscribe({
+          // En caso exitoso
+          next: (temp) => {
+            Swal.fire("Eliminado", "Registro eliminado con exito", "success");
+            // Refrescamos la lista de estudiantes
+            this.getAllCarreras();
+          },
+          // En caso erroneo
+          error: (err) => {
+            Swal.fire({
+              icon: 'error',
+              title: 'Error al eliminar',
+              text: parsearErroresAPI(err).toString()
+            });
+          }
+        });
       }
-    })
+    });
   }
 
 }

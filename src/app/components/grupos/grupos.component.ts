@@ -8,6 +8,8 @@ import { Profesor } from '../models/profesores.interface';
 import { ProfesoresService } from '../profesores/profesores.service';
 import { Materia } from '../models/materias.interface';
 import { MateriasService } from '../materias/materias.service';
+import Swal from 'sweetalert2';
+import { parsearErroresAPI } from 'src/app/Utils/Utilities';
 
 @Component({
   selector: 'app-grupos',
@@ -116,17 +118,36 @@ export class GruposComponent implements OnInit {
   }
   // Eliminar una carrera metodo que utilizare en el html
   deleteGrupo(event: any) {
-    this.grupoService.deleteGrupo(event.target.value).subscribe({
-      // En caso exitoso
-      next: (temp) => {
-        // Refrescamos la lista de carreras
-        this.getAllGrupos();
-      },
-      // En caso erroneo
-      error: (err) => {
-        console.log("Error al eliminar");
+    Swal.fire({
+      title: "¿Quiere eliminar este registro?",
+      text: "Esta acción no se puede revertir",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Sí, eliminar",
+      cancelButtonText: "Cancelar",
+      showLoaderOnConfirm: true
+    }).then((result) => {
+      if (result.isConfirmed) {
+        this.grupoService.deleteGrupo(event.target.value).subscribe({
+          // En caso exitoso
+          next: (temp) => {
+            Swal.fire("Eliminado", "Registro eliminado con exito", "success");
+            // Refrescamos la lista de estudiantes
+            this.getAllGrupos();
+          },
+          // En caso erroneo
+          error: (err) => {
+            Swal.fire({
+              icon: 'error',
+              title: 'Error al eliminar',
+              text: parsearErroresAPI(err).toString()
+            });
+          }
+        });
       }
-    })
+    });
   }
 
 }

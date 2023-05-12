@@ -12,6 +12,8 @@ import { Profesor } from '../../models/profesores.interface';
 import { Materia } from '../../models/materias.interface';
 import { MateriasService } from '../../materias/materias.service';
 import { MateriasComponent } from '../../materias/materias.component';
+import Swal from 'sweetalert2';
+import { parsearErroresAPI } from 'src/app/Utils/Utilities';
 
 @Component({
   selector: 'app-agregar-grupo',
@@ -35,8 +37,8 @@ export class AgregarGrupoComponent implements OnInit {
   formGrupo: Grupo;
   constructor(private carrerasService: CarrerasService,
     private profesoresService: ProfesoresService,
-    private materiasService: MateriasService, 
-    private formBuilder: FormBuilder, private grupoService: GrupoService, 
+    private materiasService: MateriasService,
+    private formBuilder: FormBuilder, private grupoService: GrupoService,
     private router: Router,
     private activedRoute: ActivatedRoute, private location: Location) {
     // Se inicializa el objeto carrera que se enviara
@@ -137,6 +139,15 @@ export class AgregarGrupoComponent implements OnInit {
     this.formGrupo.idProfesor = this.form.get('profesor')?.value;
     this.formGrupo.ciclo = this.form.get('ciclo')?.value;
     this.formGrupo.anio = this.form.get('anio')?.value;
+
+    // Mostrar dialogo
+    Swal.fire({
+      allowOutsideClick: false,
+      icon: 'info',
+      text: 'Guardando registro, espere por favor...'
+    });
+    Swal.showLoading();
+
     // Se valida si la variable idCarrera contiene valor, los escenarios son:
     // 1. Si el idCarrera existe y es mayor a 0 entonces se debe realizar una actualizacion de datos.
     // 2. Si el idCarrera no existe entonces se debe realizar una inserccion
@@ -145,13 +156,18 @@ export class AgregarGrupoComponent implements OnInit {
       ).subscribe({
         // Respuesta exitosa
         next: (temp) => {
+          Swal.fire("Actualizado", "Registro actualizado con exito", "success");
           // Navegar hacia atras
           //this.router.navigate(['']);
           this.location.back()
         },
         // En caso de error
         error: (err) => {
-          console.log("Error al actualizar");
+          Swal.fire({
+            icon: 'error',
+            title: 'Error al actualizar grupo',
+            text: parsearErroresAPI(err).toString()
+          });
         }
       })
     } else {
@@ -159,13 +175,18 @@ export class AgregarGrupoComponent implements OnInit {
       this.grupoService.postGrupo(this.formGrupo).subscribe({
         // Respuesta exitosa
         next: (temp) => {
+          Swal.fire("Registrado", "Registro insertado con éxito", "success");
           // Navegar hacia atras
           //this.router.navigate(['']);
           this.location.back();
         },
         // En caso de error
         error: (err) => {
-          console.log("Error al insertar");
+          Swal.fire({
+            icon: 'error',
+            title: 'Error al insertar grupo',
+            text: parsearErroresAPI(err).toString()
+          });
         }
       })
     }

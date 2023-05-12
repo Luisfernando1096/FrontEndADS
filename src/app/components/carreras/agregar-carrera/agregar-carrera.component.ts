@@ -5,6 +5,8 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { CarrerasService } from '../carreras.service';
 import { Subscription } from 'rxjs';
 import { Location } from '@angular/common';
+import Swal from 'sweetalert2';
+import { parsearErroresAPI } from 'src/app/Utils/Utilities';
 
 @Component({
   selector: 'app-agregar-carrera',
@@ -33,12 +35,12 @@ export class AgregarCarreraComponent implements OnInit {
     this.form = this.formBuilder.group({
       codigo: ['', [Validators.required]],
       nombre: ['', [Validators.required]]
-      
+
     });
     // Se inicializa el observable de ruta
     this.onRouteStart = this.activedRoute.params.subscribe((temp) => {
       // Se almacena el valor capturado en la ruta.
-      this.idCarrera= temp.idCarrera;
+      this.idCarrera = temp.idCarrera;
     });
     // Se valida que el valor del idCarrera sea mayor a cero y distinto de nulo.
     if (this.idCarrera && this.idCarrera > 0) {
@@ -61,6 +63,13 @@ export class AgregarCarreraComponent implements OnInit {
     // Asignacion de valores
     this.formCarrera.codigoCarrera = this.form.get('codigo')?.value;
     this.formCarrera.nombreCarrera = this.form.get('nombre')?.value;
+    // Mostrar dialogo
+    Swal.fire({
+      allowOutsideClick: false,
+      icon: 'info',
+      text: 'Guardando registro, espere por favor...'
+    });
+    Swal.showLoading();
     // Se valida si la variable idCarrera contiene valor, los escenarios son:
     // 1. Si el idCarrera existe y es mayor a 0 entonces se debe realizar una actualizacion de datos.
     // 2. Si el idCarrera no existe entonces se debe realizar una inserccion
@@ -69,13 +78,18 @@ export class AgregarCarreraComponent implements OnInit {
       ).subscribe({
         // Respuesta exitosa
         next: (temp) => {
+          Swal.fire("Actualizado", "Registro actualizado con exito", "success");
           // Navegar hacia atras
           //this.router.navigate(['']);
           this.location.back()
         },
         // En caso de error
         error: (err) => {
-          console.log("Error al actualizar");
+          Swal.fire({
+            icon: 'error',
+            title: 'Error al insertar carrera',
+            text: parsearErroresAPI(err).toString()
+          });
         }
       })
     } else {
@@ -83,13 +97,18 @@ export class AgregarCarreraComponent implements OnInit {
       this.carreraService.postCarrera(this.formCarrera).subscribe({
         // Respuesta exitosa
         next: (temp) => {
+          Swal.fire("Registrado", "Registro insertado con éxito", "success");
           // Navegar hacia atras
           //this.router.navigate(['']);
           this.location.back();
         },
         // En caso de error
         error: (err) => {
-          console.log("Error al insertar");
+          Swal.fire({
+            icon: 'error',
+            title: 'Error al insertar carrera',
+            text: parsearErroresAPI(err).toString()
+          });
         }
       })
     }

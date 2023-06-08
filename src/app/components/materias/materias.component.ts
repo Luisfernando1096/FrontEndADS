@@ -82,7 +82,7 @@ export class MateriasComponent implements OnInit {
           next: (temp) => {
             Swal.fire("Eliminado", "Registro eliminado con exito", "success");
             // Refrescamos la lista de estudiantes
-            this.getAllMaterias();
+            window.location.reload();
           },
           // En caso erroneo
           error: (err) => {
